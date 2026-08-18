@@ -193,7 +193,7 @@
         <i><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>No auto-renew</i>
       </div>
       <button class="cta" id="reserve">
-        <span id="reserveLabel">Get Weekly Pass</span>
+        <span id="reserveLabel">Get Weekly Pass · ₹79</span>
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
       </button>
     </div>
@@ -206,7 +206,7 @@
         <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
       </div>
       <h1>You're on the waitlist!</h1>
-      <p class="lede">We'll let you know as soon as your <span id="doneWhich">Weekly</span> Pass is ready.</p>
+      <p class="lede">We'll let you know when your <span id="doneWhich">Weekly</span> Pass is ready.</p>
     </div>
   </section>
 
@@ -217,7 +217,7 @@
         <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
       </div>
       <h1>You're on the waitlist!</h1>
-      <p class="lede">We'll let you know as soon as your pass is ready.</p>
+      <p class="lede">We'll let you know when your <span id="alreadyWhich">Weekly</span> Pass is ready.</p>
     </div>
   </section>
 </div>
@@ -290,7 +290,7 @@ let switchedPass = false;
 
 function renderCTA(){
   const p = PLANS[picked];
-  reserveLabel.textContent = `Get ${p.name} Pass`;
+  reserveLabel.textContent = `Get ${p.name} Pass · ₹${p.price}`;
 }
 
 passes.forEach(p => p.addEventListener('click', () => {
@@ -326,6 +326,10 @@ async function boot(){
   const status = await checkStatus();
 
   if (status && status.completed){
+    const savedPlan = status.final_selection && PLANS[status.final_selection]
+      ? PLANS[status.final_selection].name
+      : 'Weekly';
+    document.getElementById('alreadyWhich').textContent = savedPlan;
     app.dataset.screen = 'already';
     document.getElementById('loadingScreen').style.display = 'none';
     return;
